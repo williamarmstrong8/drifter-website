@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { journalEntries } from "@/data/journalEntries";
 
 const JournalHighlights = () => {
-  const featuredEntries = journalEntries.slice(0, 3);
+  const featuredEntries = journalEntries.slice(0, 1);
 
   return (
     <section className="py-20 md:py-32 bg-card">

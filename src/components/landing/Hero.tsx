@@ -30,16 +30,6 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col justify-between px-6 py-8 md:px-12 lg:px-20">
-        {/* Top - Brand */}
-        <header
-          className={`transition-all duration-1000 delay-300 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-          }`}
-        >
-          <h1 className="font-serif text-xl md:text-2xl text-warm-white/90 tracking-wide">
-            Destination Drifters
-          </h1>
-        </header>
 
         {/* Middle - Tagline (Asymmetric positioning) */}
         <div className="flex-1 flex items-center">
