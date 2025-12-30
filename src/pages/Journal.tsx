@@ -1,8 +1,30 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { journalEntries } from "@/data/journalEntries";
+import { journalEntries, JournalTag } from "@/data/journalEntries";
 import Navigation from "@/components/layout/Navigation";
+import { X } from "lucide-react";
 
 const Journal = () => {
+  const [selectedTags, setSelectedTags] = useState<JournalTag[]>([]);
+
+  const allTags: JournalTag[] = ["Study Abroad", "Europe Guides", "Travel Tips", "Accommodation Reviews"];
+
+  const toggleTag = (tag: JournalTag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const clearFilters = () => {
+    setSelectedTags([]);
+  };
+
+  const filteredEntries = selectedTags.length === 0
+    ? journalEntries
+    : journalEntries.filter((entry) =>
+        selectedTags.some((tag) => entry.tags.includes(tag))
+      );
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -25,9 +47,43 @@ const Journal = () => {
 
       {/* Journal Catalog */}
       <main className="px-6 md:px-12 lg:px-20 pb-24">
+        {/* Filter Section */}
+        <div className="mb-12 -mt-8 md:-mt-12">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                  selectedTags.includes(tag)
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-foreground border-border hover:border-primary/50 hover:bg-card"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+            {selectedTags.length > 0 && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground border border-border hover:border-primary/50 transition-colors"
+              >
+                <X className="w-4 h-4" />
+                Clear filters
+              </button>
+            )}
+          </div>
+          {selectedTags.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredEntries.length} {filteredEntries.length === 1 ? "entry" : "entries"}
+            </p>
+          )}
+        </div>
+
         {/* Catalog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {journalEntries.map((entry, index) => (
+          {filteredEntries.map((entry, index) => (
             <Link
               to={`/journal/${entry.id}`}
               key={entry.id}
@@ -71,6 +127,20 @@ const Journal = () => {
                   <p className="text-foreground/70 text-sm leading-relaxed line-clamp-3">
                     {entry.excerpt}
                   </p>
+
+                  {/* Tags */}
+                  {entry.tags && entry.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {entry.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-1 text-xs font-medium text-primary bg-primary/10 rounded-sm border border-primary/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Author */}
                   <div className="flex items-center justify-between pt-3 border-t border-border/30">

@@ -7,6 +7,8 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isAboutPage = location.pathname === "/about";
+  const hasTransparentNav = (isHomePage || isAboutPage) && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,13 +30,13 @@ const Navigation = () => {
     { to: "/about", label: "About" },
   ];
 
-  const baseStyles = isHomePage && !isScrolled
+  const baseStyles = hasTransparentNav
     ? "text-warm-white/80 hover:text-warm-white"
     : "text-foreground/80 hover:text-foreground";
 
   const bgStyles = isScrolled
     ? "bg-background/95 backdrop-blur-md shadow-sm"
-    : isHomePage
+    : hasTransparentNav
     ? "bg-transparent"
     : "bg-background";
 
