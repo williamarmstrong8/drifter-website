@@ -24,7 +24,7 @@ const DestinationCard = ({ destination, onClose }: DestinationCardProps) => {
   const journalId = destination.journalId;
 
   return (
-    <div className="absolute top-4 left-4 z-50 pointer-events-none">
+    <div className="absolute top-4 left-4 z-40 pointer-events-none">
       <Card className="w-full max-w-sm relative pointer-events-auto shadow-2xl overflow-hidden">
         <Button
           variant="ghost"

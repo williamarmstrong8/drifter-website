@@ -10,6 +10,7 @@ interface GlobeProps {
   onPinClick?: (destination: any, position?: { x: number; y: number }) => void;
   onRotationChange?: (isRotating: boolean) => void;
   isRotating?: boolean;
+  isFullscreen?: boolean;
 }
 
 interface MarkerProps {
@@ -325,7 +326,7 @@ const ZoomHandler = ({
   return null;
 };
 
-const Globe = ({ onPinClick, onRotationChange, isRotating: externalIsRotating }: GlobeProps) => {
+const Globe = ({ onPinClick, onRotationChange, isRotating: externalIsRotating, isFullscreen = false }: GlobeProps) => {
   const [internalIsRotating, setInternalIsRotating] = useState(true);
   const zoomInRef = useRef<(() => void) | null>(null);
   const zoomOutRef = useRef<(() => void) | null>(null);
@@ -352,7 +353,7 @@ const Globe = ({ onPinClick, onRotationChange, isRotating: externalIsRotating }:
   return (
     <div className="w-full h-full relative">
       <Canvas
-        camera={{ position: [0, 0, 2.5], fov: 50 }}
+        camera={{ position: [0, 0, 2.8], fov: 50 }}
         gl={{ 
           antialias: true, 
           alpha: true,
@@ -370,7 +371,7 @@ const Globe = ({ onPinClick, onRotationChange, isRotating: externalIsRotating }:
             enableZoom={false}
             enablePan={false}
             minDistance={2.1}
-            maxDistance={3.5}
+            maxDistance={3.8}
             autoRotate={false}
             enableDamping={true}
             dampingFactor={0.1}
@@ -401,12 +402,14 @@ const Globe = ({ onPinClick, onRotationChange, isRotating: externalIsRotating }:
         </Button>
       </div>
       
-      {/* Instructions overlay */}
-      <div className="absolute bottom-4 left-4 right-4 text-center pointer-events-none z-10">
-        <p className="text-white/70 text-sm bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full inline-block">
-          Drag to rotate the globe • Click on the glowing markers to explore destinations
-        </p>
-      </div>
+      {/* Instructions overlay - only show in fullscreen */}
+      {isFullscreen && (
+        <div className="absolute bottom-4 left-4 right-4 text-center pointer-events-none z-10">
+          <p className="text-white/70 text-sm bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full inline-block">
+            Drag to rotate the globe • Click on the glowing markers to explore destinations
+          </p>
+        </div>
+      )}
     </div>
   );
 };

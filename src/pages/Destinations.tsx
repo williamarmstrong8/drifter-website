@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import Globe from "@/components/Globe";
 import DestinationCard from "@/components/DestinationCard";
+import { Maximize, Minimize } from "lucide-react";
 
 const Destinations = () => {
   const [selectedDestination, setSelectedDestination] = useState<any>(null);
   const [isGlobeRotating, setIsGlobeRotating] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const globeContainerRef = useRef<HTMLDivElement>(null);
 
   const handlePinClick = (destination: any) => {
     setSelectedDestination(destination);
@@ -19,6 +22,34 @@ const Destinations = () => {
     setSelectedDestination(null);
     setIsGlobeRotating(true); // Resume rotation when modal closes
   };
+
+  const toggleFullscreen = async () => {
+    if (!globeContainerRef.current) return;
+
+    try {
+      if (!document.fullscreenElement) {
+        await globeContainerRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error("Error toggling fullscreen:", error);
+    }
+  };
+
+  // Listen for fullscreen changes (user might exit via ESC key)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,11 +75,30 @@ const Destinations = () => {
       <main className="px-6 md:px-12 lg:px-20 pb-24">
         <div className="max-w-7xl mx-auto">
           {/* Globe Container */}
-          <div className="relative h-[600px] md:h-[800px] bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 rounded-lg overflow-visible border border-border/50">
+          <div 
+            ref={globeContainerRef}
+            className={`relative h-[600px] md:h-[800px] bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 rounded-lg overflow-visible border border-border/50 ${
+              isFullscreen ? "h-screen rounded-none border-0" : ""
+            }`}
+          >
+            {/* Fullscreen Button */}
+            <button
+              onClick={toggleFullscreen}
+              className="absolute bottom-4 right-4 z-50 p-2 bg-background/80 backdrop-blur-sm hover:bg-background border border-border/50 rounded-sm transition-all duration-200 hover:border-primary/50 group"
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            >
+              {isFullscreen ? (
+                <Minimize className="w-5 h-5 text-foreground/80 group-hover:text-foreground" />
+              ) : (
+                <Maximize className="w-5 h-5 text-foreground/80 group-hover:text-foreground" />
+              )}
+            </button>
+
             <Globe 
               onPinClick={handlePinClick} 
               isRotating={isGlobeRotating}
               onRotationChange={handleRotationChange}
+              isFullscreen={isFullscreen}
             />
             
             {/* Destination Card Modal - positioned in top left of globe container */}

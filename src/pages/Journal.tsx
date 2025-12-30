@@ -19,11 +19,17 @@ const Journal = () => {
     setSelectedTags([]);
   };
 
-  const filteredEntries = selectedTags.length === 0
+  const filteredEntries = (selectedTags.length === 0
     ? journalEntries
     : journalEntries.filter((entry) =>
         selectedTags.some((tag) => entry.tags.includes(tag))
-      );
+      )
+  ).sort((a, b) => {
+    // Sort by datePosted in descending order (most recent first)
+    const dateA = new Date(a.datePosted);
+    const dateB = new Date(b.datePosted);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,19 +88,31 @@ const Journal = () => {
         </div>
 
         {/* Catalog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {filteredEntries.map((entry, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12" style={{ gridAutoFlow: 'dense' }}>
+          {filteredEntries.map((entry, index) => {
+            // Smart pattern: every 4th card (starting from index 0) is double-width
+            // Only apply double-width if there are enough remaining entries to fill the gap
+            const totalEntries = filteredEntries.length;
+            const remainingEntries = totalEntries - index - 1;
+            // Only make double-width if:
+            // 1. It's every 4th card (index % 4 === 0)
+            // 2. There are at least 2 more entries after this one (to fill potential gaps)
+            // OR it's the first card and we have at least 3 total entries
+            const isDoubleWidth = index % 4 === 0 && 
+              (remainingEntries >= 2 || (index === 0 && totalEntries >= 3));
+            
+            return (
             <Link
               to={`/journal/${entry.id}`}
               key={entry.id}
-              className={`group block ${index % 7 === 0 ? 'md:col-span-2 lg:col-span-2' : ''}`}
+              className={`group block ${isDoubleWidth ? 'md:col-span-2 lg:col-span-2' : ''}`}
               style={{
                 animationDelay: `${index * 50}ms`,
               }}
             >
               <article className="h-full bg-card rounded-sm border border-border/50 overflow-hidden hover:border-border transition-all duration-300 image-lift group-hover:shadow-lg">
                 {/* Image */}
-                <div className={`relative ${index % 7 === 0 ? 'aspect-[16/10]' : 'aspect-[4/5]'} overflow-hidden`}>
+                <div className={`relative ${isDoubleWidth ? 'aspect-[16/10]' : 'aspect-[4/5]'} overflow-hidden`}>
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 film-grain"
                     style={{ backgroundImage: `url('${entry.image}')` }}
@@ -105,7 +123,7 @@ const Journal = () => {
                 </div>
 
                 {/* Content */}
-                <div className={`p-6 space-y-3 ${index % 7 === 0 ? 'flex flex-col justify-between min-h-[140px]' : ''}`}>
+                <div className={`p-6 space-y-3 ${isDoubleWidth ? 'flex flex-col justify-between min-h-[140px]' : ''}`}>
                   {/* Date & Location */}
                   <div className="flex items-center justify-between text-xs text-muted-foreground uppercase tracking-wider">
                     <span className="font-handwriting">{entry.date}</span>
@@ -160,7 +178,8 @@ const Journal = () => {
                 </div>
               </article>
             </Link>
-          ))}
+            );
+          })}
         </div>
 
         {/* End of catalog */}
