@@ -3,7 +3,7 @@ import { Compass } from "lucide-react";
 
 const InvitationFooter = () => {
   return (
-    <footer className="relative py-32 md:py-48 overflow-hidden">
+    <footer className="relative pt-32 md:pt-48 pb-16 md:pb-20 overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed film-grain"

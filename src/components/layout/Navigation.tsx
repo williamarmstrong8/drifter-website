@@ -5,19 +5,34 @@ import { Menu, X } from "lucide-react";
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isAboutPage = location.pathname === "/about";
-  const hasTransparentNav = (isHomePage || isAboutPage) && !isScrolled;
+  const isJournalEntryPage = location.pathname.startsWith("/journal/") && location.pathname !== "/journal";
+  const hasTransparentNav = (isHomePage || isAboutPage || isJournalEntryPage) && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down
+        setScrollDirection("down");
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up
+        setScrollDirection("up");
+      }
+      
+      setLastScrollY(currentScrollY);
+      setIsScrolled(currentScrollY > 50);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -42,14 +57,26 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${bgStyles}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+        scrollDirection === "down" ? "-translate-y-full" : "translate-y-0"
+      } ${bgStyles}`}
     >
       <div className="px-6 md:px-12 lg:px-20 py-4 md:py-6 flex items-center justify-between">
         {/* Logo */}
         <Link
           to="/"
-          className={`font-serif text-lg md:text-xl transition-colors ${baseStyles}`}
+          className={`flex items-center gap-2 font-serif text-lg md:text-xl transition-colors ${baseStyles}`}
         >
+          <img
+            src="/drifters-logo-web.svg"
+            alt="Destination Drifters Logo"
+            className={`h-8 w-8 md:h-10 md:w-10 transition-colors`}
+            style={{
+              filter: hasTransparentNav
+                ? "brightness(0) invert(1)"
+                : "brightness(0)"
+            }}
+          />
           Destination Drifters
         </Link>
 

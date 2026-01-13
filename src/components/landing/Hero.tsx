@@ -35,14 +35,14 @@ const Hero = () => {
         <div className="flex-1 flex items-center">
           <div className="max-w-2xl lg:max-w-3xl">
             <p
-              className={`font-handwriting text-lg md:text-xl text-warm-white/70 mb-4 transition-all duration-1000 delay-500 ${
+              className={`font-handwriting text-lg md:text-xl text-warm-white/70 mb-4 transition-all duration-1000 delay-0 ${
                 isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
               A living travel journal
             </p>
             <h2
-              className={`font-serif text-4xl md:text-5xl lg:text-7xl text-warm-white leading-[1.1] tracking-tight transition-all duration-1000 delay-700 ${
+              className={`font-serif text-4xl md:text-5xl lg:text-7xl text-warm-white leading-[1.1] tracking-tight transition-all duration-1000 delay-200 ${
                 isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
@@ -51,7 +51,7 @@ const Hero = () => {
               <span className="italic">a story worth telling</span>
             </h2>
             <p
-              className={`mt-6 md:mt-8 text-warm-white/60 text-lg md:text-xl max-w-md font-light transition-all duration-1000 delay-900 ${
+              className={`mt-6 md:mt-8 text-warm-white/60 text-lg md:text-xl max-w-md font-light transition-all duration-1000 delay-400 ${
                 isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
@@ -62,7 +62,7 @@ const Hero = () => {
 
         {/* Bottom - Scroll Indicator */}
         <div
-          className={`flex justify-center transition-all duration-1000 delay-1000 ${
+          className={`flex justify-center transition-all duration-1000 delay-600 ${
             isLoaded ? "opacity-100" : "opacity-0"
           }`}
         >

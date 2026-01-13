@@ -19,13 +19,13 @@ const About = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat film-grain"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')`,
+            backgroundImage: `url('/about/hero.jpeg')`,
             transform: "scale(1.1)",
           }}
         >
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-deep-earth/60 via-deep-earth/40 to-deep-earth/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-deep-earth/50 via-transparent to-deep-earth/30" />
+          {/* Black Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/20" />
         </div>
 
         {/* Floating Content */}
@@ -76,7 +76,7 @@ const About = () => {
                 <div
                   className="absolute inset-0 bg-cover bg-center film-grain"
                   style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80')`,
+                    backgroundImage: `url('/about/yosemite.jpeg')`,
                   }}
                 />
                 <div className="absolute inset-0 bg-primary/10" />
@@ -117,7 +117,7 @@ const About = () => {
                 <div
                   className="absolute inset-0 bg-cover bg-center film-grain"
                   style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80')`,
+                    backgroundImage: `url('/about/snapshot.jpeg')`,
                   }}
                 />
                 <div className="absolute inset-0 bg-primary/5" />

@@ -1,8 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { journalEntries, JournalEntry } from "@/data/journalEntries";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
+import Navigation from "@/components/layout/Navigation";
 
 const JournalEntryPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,7 @@ const JournalEntryPage = () => {
   if (!entry) {
     return (
       <div className="min-h-screen bg-background">
+        <Navigation />
         <div className="pt-24 pb-16 px-6 md:px-12 lg:px-20 text-center">
           <h1 className="font-serif text-4xl mb-4">Entry Not Found</h1>
           <Link to="/journal" className="text-primary hover:underline">
@@ -37,6 +39,8 @@ const JournalEntryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
+      
       {/* Hero Image */}
       <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
         <div
@@ -44,17 +48,6 @@ const JournalEntryPage = () => {
           style={{ backgroundImage: `url('${entry.image}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-        
-        {/* Back Button */}
-        <div className="relative z-10 pt-12 px-6 md:px-12 lg:px-20">
-          <Link
-            to="/journal"
-            className="inline-flex items-center gap-2 text-foreground/80 hover:text-foreground transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
-            <span className="font-handwriting">Back to Journal</span>
-          </Link>
-        </div>
       </div>
 
       {/* Header Section */}
@@ -132,29 +125,49 @@ const JournalEntryPage = () => {
                             )}
 
                             {/* Paragraph Content */}
-                            <p className="text-foreground/90 text-lg leading-relaxed mb-6">
+                            <p className="text-foreground/90 text-lg leading-relaxed mb-6 whitespace-pre-line">
                               {para.content}
                             </p>
 
                             {/* Photos */}
                             {para.photos && para.photos.length > 0 && (
                               <div className="space-y-4 my-8">
-                                {para.photos.map((photo, photoIndex) => (
-                                  <figure key={photoIndex} className="my-8">
-                                    <div className="relative aspect-video overflow-hidden rounded-sm image-lift">
-                                      <img
-                                        src={photo.url}
-                                        alt={photo.alt || photo.caption || ""}
-                                        className="w-full h-full object-cover"
-                                      />
-                                    </div>
-                                    {photo.caption && (
-                                      <figcaption className="mt-3 text-sm text-muted-foreground italic text-center">
-                                        {photo.caption}
-                                      </figcaption>
-                                    )}
-                                  </figure>
-                                ))}
+                                {para.photos.map((photo, photoIndex) => {
+                                  // Determine aspect ratio: use photo.orientation if specified, otherwise use default logic
+                                  const isVertical = photo.orientation === "vertical" || 
+                                    (photo.orientation === undefined && para.photos && para.photos.length === 1);
+                                  const isSquare = photo.orientation === "square";
+                                  
+                                  let aspectRatio: string;
+                                  let containerClass = "my-8";
+                                  
+                                  if (isSquare) {
+                                    aspectRatio = "aspect-square";
+                                    containerClass += " max-w-md mx-auto";
+                                  } else if (isVertical) {
+                                    aspectRatio = "aspect-[4/5]";
+                                    containerClass += " max-w-sm mx-auto";
+                                  } else {
+                                    aspectRatio = "aspect-video";
+                                  }
+                                  
+                                  return (
+                                    <figure key={photoIndex} className={containerClass}>
+                                      <div className={`relative overflow-hidden rounded-sm image-lift ${aspectRatio}`}>
+                                        <img
+                                          src={photo.url}
+                                          alt={photo.alt || photo.caption || ""}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </div>
+                                      {photo.caption && (
+                                        <figcaption className="mt-3 text-sm text-muted-foreground italic text-center">
+                                          {photo.caption}
+                                        </figcaption>
+                                      )}
+                                    </figure>
+                                  );
+                                })}
                               </div>
                             )}
 

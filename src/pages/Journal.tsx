@@ -114,7 +114,7 @@ const Journal = () => {
                 {/* Image */}
                 <div className={`relative ${isDoubleWidth ? 'aspect-[16/10]' : 'aspect-[4/5]'} overflow-hidden`}>
                   <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 film-grain"
+                    className={`absolute inset-0 bg-cover transition-transform duration-700 group-hover:scale-105 film-grain bg-center`}
                     style={{ backgroundImage: `url('${entry.image}')` }}
                   />
                   {/* Subtle overlay */}

@@ -108,10 +108,21 @@
   
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    position: relative;
   }
   
   html {
     scroll-behavior: smooth;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    height: 100%;
+  }
+  
+  #root {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
   }
 }
 
