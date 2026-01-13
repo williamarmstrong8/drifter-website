@@ -156,10 +156,12 @@ const About = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {[
-            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80",
-            "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80",
-            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&q=80",
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80",
+            "/journal/adjusting-to-abroad-lifestyle/karoake.jpg",
+            "/journal/breaking-boundaries-solo-trip-cinque-terre/new-friends-2.jpeg",
+            "/journal/breaking-boundaries-solo-trip-cinque-terre/best-coast-shot.jpeg",
+            "/journal/croatia-coast-favorite-warm-weather-destination/backflip.JPG",
+            "/journal/favorite-weekend-trips-abroad/morocoo-camel-ride.jpeg",
+            "/journal/favorite-weekend-trips-abroad/trampoline-jump-copenhagen.JPG",
           ].map((image, index) => (
             <div
               key={index}
