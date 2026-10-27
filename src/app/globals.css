@@ -1,0 +1,444 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Design tokens. Everything visual reads from these; see README "Design system".
+   ========================================================================== */
+@layer base {
+  :root {
+    /* Color: stone, moss, deep water, sand, dusk, plus one accent (ember). */
+    --ink: 14 19 17; /* #0E1311 night moss, primary dark surface */
+    --ink-raised: 22 29 26; /* #161D1A */
+    --paper: 238 232 221; /* #EEE8DD sand, primary light surface */
+    --paper-sunk: 228 220 205; /* #E4DCCD */
+    --stone: 207 198 182; /* #CFC6B6 secondary text on ink (11:1) */
+    --muted-on-ink: 163 156 143; /* #A39C8F (6.9:1 on ink) */
+    --muted-on-paper: 92 86 77; /* #5C564D (6:1 on paper) */
+    --moss: 61 74 54; /* #3D4A36 */
+    --water: 31 58 64; /* #1F3A40 */
+    --dusk: 122 106 127; /* #7A6A7F decorative only */
+    --ember: 232 87 42; /* #E8572A accent on ink (5.2:1) */
+    --ember-deep: 163 54 20; /* #A33614 accent text on paper (5.6:1) and sunk paper (5:1) */
+    --line-on-ink: 255 255 255 / 0.14;
+    --line-on-paper: 14 19 17 / 0.14;
+    /* Contextual tokens, reset by .surface-ink / .surface-paper. Ink is the default. */
+    --line: var(--line-on-ink);
+    --muted: var(--muted-on-ink);
+    --accent: var(--ember);
+
+    /* Type: fluid scale from 375px to 1920px viewports. */
+    --step--2: clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem); /* micro labels, never under 12px */
+    --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+    --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+    --step-1: clamp(1.1875rem, 1.1rem + 0.4vw, 1.4375rem);
+    --step-2: clamp(1.5rem, 1.32rem + 0.8vw, 2.125rem);
+    --step-3: clamp(2rem, 1.6rem + 1.8vw, 3.5rem);
+    --step-4: clamp(2.75rem, 1.9rem + 3.8vw, 6.25rem);
+    --step-5: clamp(3.5rem, 2rem + 7vw, 10.5rem);
+    --step-6: clamp(4.25rem, 1rem + 14.5vw, 19rem); /* mega display */
+    --measure: 68ch;
+
+    /* Space */
+    --gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
+    --section: clamp(5rem, 3rem + 10vw, 13rem);
+    --nav-h: 4.5rem;
+
+    /* Shape */
+    --radius-sm: 2px;
+    --radius-pill: 999px;
+    --shadow-float: 0 30px 60px -20px rgb(0 0 0 / 0.45);
+
+    /* Layers */
+    --z-raised: 10;
+    --z-sticky: 40;
+    --z-nav: 50;
+    --z-overlay: 80;
+    --z-toast: 90;
+    --z-cursor: 100;
+
+    /* Motion: four named easings, five durations. Reuse; don't invent new curves. */
+    --ease-glide: cubic-bezier(0.16, 1, 0.3, 1); /* entrances, reveals */
+    --ease-drift: cubic-bezier(0.65, 0, 0.35, 1); /* page transitions, crossfades */
+    --ease-snap: cubic-bezier(0.2, 0.8, 0.2, 1); /* hovers, UI feedback */
+    --ease-linear: linear; /* scroll-linked only */
+    --dur-1: 160ms;
+    --dur-2: 320ms;
+    --dur-3: 640ms;
+    --dur-4: 1100ms;
+    --dur-5: 1800ms;
+    --stagger: 70ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-1: 1ms;
+      --dur-2: 1ms;
+      --dur-3: 1ms;
+      --dur-4: 1ms;
+      --dur-5: 1ms;
+      --stagger: 0ms;
+    }
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-ink text-paper font-sans antialiased;
+    font-size: var(--step-0);
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background: rgb(var(--ember));
+    color: rgb(var(--ink));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--ember));
+    outline-offset: 3px;
+  }
+
+  [id] {
+    scroll-margin-top: calc(var(--nav-h) + 1rem);
+  }
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+@layer components {
+  /* Surfaces set text color, line color and focus ring together. */
+  .surface-ink {
+    @apply bg-ink text-paper;
+    --line: var(--line-on-ink);
+    --muted: var(--muted-on-ink);
+    --accent: var(--ember);
+  }
+  .surface-paper {
+    @apply bg-paper text-ink;
+    --line: var(--line-on-paper);
+    --muted: var(--muted-on-paper);
+    --accent: var(--ember-deep);
+  }
+
+  /* Display type: Archivo, condensed and heavy, uppercase. */
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 72;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+  }
+  .display-wide {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 125;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  /* Serif italic accent inside display lines. */
+  .accent-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 72;
+  }
+  /* Micro labels: coordinates, numbers, metadata. */
+  .label {
+    font-family: var(--font-display);
+    font-size: var(--step--2);
+    font-weight: 600;
+    font-variation-settings: "wdth" 100;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .muted {
+    color: rgb(var(--muted));
+  }
+
+  .container-x {
+    padding-inline: var(--gutter);
+  }
+
+  /* --- Hover: one style. Underline wipes in from the left; media eases forward. --- */
+  .link-wipe {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-wipe::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.12em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-2) var(--ease-snap);
+  }
+  .link-wipe:hover::after,
+  .link-wipe:focus-visible::after,
+  .link-wipe[aria-current="page"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .hover-media img,
+  .hover-media video {
+    transition: transform var(--dur-3) var(--ease-glide);
+  }
+  .group:hover .hover-media img,
+  .group:focus-visible .hover-media img,
+  .hover-media:hover img {
+    transform: scale(1.045);
+  }
+
+  /* --- Buttons --- */
+  .btn {
+    @apply label inline-flex items-center gap-3;
+    padding: 1.05rem 1.6rem;
+    border-radius: var(--radius-pill);
+    transition:
+      background-color var(--dur-2) var(--ease-snap),
+      color var(--dur-2) var(--ease-snap),
+      transform var(--dur-2) var(--ease-snap);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-solid {
+    background: rgb(var(--ember));
+    color: rgb(var(--ink));
+  }
+  .btn-solid:hover {
+    background: rgb(var(--paper));
+  }
+  .btn-ghost {
+    border: 1px solid currentColor;
+  }
+  .btn-ghost:hover {
+    background: currentColor;
+  }
+  .btn-ghost:hover > * {
+    color: rgb(var(--ink));
+  }
+  .surface-paper .btn-ghost:hover > * {
+    color: rgb(var(--paper));
+  }
+
+  /* --- Scrims: guarantee AA text over photos. --- */
+  .scrim-bottom {
+    background: linear-gradient(to top, rgb(var(--ink) / 0.85) 0%, rgb(var(--ink) / 0.35) 45%, transparent 75%);
+  }
+  .scrim-full {
+    background: rgb(var(--ink) / 0.45);
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ==========================================================================
+   Motion system. Reveals are CSS; <RevealObserver/> only flips data-inview.
+   Hidden start states apply only under @media (scripting: enabled), so
+   content is never lost without JavaScript.
+   ========================================================================== */
+
+/* Text reveal: each .line is a mask; its child rises into place, staggered by --i. */
+[data-reveal="lines"] .line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+[data-reveal="lines"] .line > span {
+  display: inline-block;
+  transition: transform var(--dur-4) var(--ease-glide);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+@media (scripting: enabled) {
+  [data-reveal="lines"]:not([data-inview]) .line > span {
+    transform: translateY(108%);
+  }
+}
+
+/* Above the fold, lines rise on load from CSS alone so headings never wait for hydration. */
+[data-reveal="lines-load"] .line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+[data-reveal="lines-load"] .line > span {
+  display: inline-block;
+  animation: line-rise var(--dur-4) var(--ease-glide) both;
+  animation-delay: calc(80ms + var(--i, 0) * var(--stagger));
+}
+@keyframes line-rise {
+  from {
+    transform: translateY(108%);
+  }
+}
+
+/* Image reveal: a curtain. The frame rises while the image settles from 1.18x. */
+[data-reveal="image"] {
+  overflow: hidden;
+}
+[data-reveal="image"] > * {
+  transition: transform var(--dur-5) var(--ease-glide);
+}
+[data-reveal="image"] img {
+  transition: transform var(--dur-5) var(--ease-glide);
+}
+@media (scripting: enabled) {
+  [data-reveal="image"]:not([data-inview]) > * {
+    transform: translateY(100%);
+  }
+}
+@media (scripting: enabled) {
+  [data-reveal="image"]:not([data-inview]) img {
+    transform: translateY(-60%) scale(1.18);
+  }
+}
+
+/* Above-the-fold fade: plays on load from CSS alone. */
+[data-reveal="fade-load"] {
+  animation: fade-rise var(--dur-4) var(--ease-glide) both;
+  animation-delay: calc(240ms + var(--i, 0) * var(--stagger));
+}
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+/* Fade: for supporting copy and UI. */
+[data-reveal="fade"] {
+  transition:
+    opacity var(--dur-4) var(--ease-glide),
+    transform var(--dur-4) var(--ease-glide);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+@media (scripting: enabled) {
+  [data-reveal="fade"]:not([data-inview]) {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] *,
+  [data-reveal] {
+    transform: none !important;
+  }
+  [data-reveal="fade"]:not([data-inview]) {
+    opacity: 1 !important;
+  }
+}
+
+/* Page transition: the outgoing page dims and drops slightly, the new one rises in. */
+::view-transition-old(.page) {
+  animation: var(--dur-2) var(--ease-drift) both vt-out;
+}
+::view-transition-new(.page) {
+  animation: var(--dur-3) var(--ease-glide) both vt-in;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-1.5rem);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+}
+/* Shared photo morph between a story card and its hero. */
+::view-transition-group(.morph) {
+  animation-duration: var(--dur-3);
+  animation-timing-function: var(--ease-glide);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Full-screen menu: the panel drops in from the top, links rise in sequence. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+.site-menu {
+  color: rgb(var(--paper));
+  inset: 0;
+  transition:
+    transform var(--dur-3) var(--ease-glide),
+    overlay var(--dur-3) allow-discrete,
+    display var(--dur-3) allow-discrete;
+  transform: translateY(-100%);
+}
+.site-menu[open] {
+  transform: none;
+}
+@starting-style {
+  .site-menu[open] {
+    transform: translateY(-100%);
+  }
+}
+.site-menu::backdrop {
+  background: transparent;
+}
+.site-menu[open] .menu-item {
+  animation: menu-rise var(--dur-4) var(--ease-glide) both;
+  animation-delay: calc(120ms + var(--i, 0) * var(--stagger));
+}
+@keyframes menu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .full-bleed {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}

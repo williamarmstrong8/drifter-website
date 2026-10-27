@@ -33,6 +33,8 @@ export interface ArticleContent {
 
 export type JournalTag = "Study Abroad" | "Europe Guides" | "Travel Tips" | "Accommodation Reviews";
 
+export type JournalRegion = "Across Europe" | "Central Europe" | "Mediterranean" | "Nordics" | "Atlantic Islands";
+
 export interface JournalEntry {
   id: string;
   title: string;
@@ -50,6 +52,7 @@ export interface JournalEntry {
   };
   readTime: string;
   tags: JournalTag[];
+  region: JournalRegion;
   coordinates?: {
     lat: number;
     lng: number;
@@ -73,7 +76,8 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "12 min read",
     tags: ["Travel Tips", "Study Abroad"],
-    coordinates: { lat: 31.6295, lng: -7.9811 }, // Marrakech, Morocco
+    region: "Across Europe",
+    // No coordinates: a roundup of several trips, not one place, so it stays off the globe and route.
     content: {
       sections: [
         { id: "introduction", title: "Introduction" },
@@ -191,7 +195,8 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "10 min read",
     tags: ["Travel Tips"],
-    coordinates: { lat: 50.0755, lng: 14.4378 }, // Prague (study abroad base)
+    region: "Across Europe",
+    // No coordinates: a general guide, not a place, so it stays off the globe and route.
     content: {
       sections: [
         { id: "introduction", title: "Introduction" },
@@ -312,7 +317,8 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "12 min read",
     tags: ["Study Abroad", "Travel Tips"],
-    coordinates: { lat: 50.0755, lng: 14.4378 }, // Prague, Czech Republic
+    region: "Central Europe",
+    // No coordinates: a general guide, not a place, so it stays off the globe and route.
     content: {
       sections: [
         { id: "introduction", title: "Introduction" },
@@ -453,6 +459,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "8 min read",
     tags: ["Accommodation Reviews"],
+    region: "Central Europe",
     coordinates: { lat: 47.4979, lng: 19.0402 }, // Budapest, Hungary
     content: {
       sections: [
@@ -569,6 +576,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "10 min read",
     tags: ["Study Abroad", "Travel Tips"],
+    region: "Central Europe",
     coordinates: { lat: 50.0755, lng: 14.4378 }, // Prague, Czech Republic
     content: {
       sections: [
@@ -648,6 +656,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "12 min read",
     tags: ["Europe Guides"],
+    region: "Mediterranean",
     coordinates: { lat: 41.0082, lng: 28.9784 }, // Istanbul, Turkey
     content: {
       sections: [
@@ -763,7 +772,8 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "8 min read",
     tags: ["Travel Tips"],
-    coordinates: { lat: 50.0755, lng: 14.4378 }, // Europe (general - using Prague as base)
+    region: "Across Europe",
+    // No coordinates: a Europe-wide guide, not a place, so it stays off the globe and route.
     content: {
       sections: [
         { id: "introduction", title: "Introduction" },
@@ -852,6 +862,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "11 min read",
     tags: ["Study Abroad"],
+    region: "Mediterranean",
     coordinates: { lat: 40.4168, lng: -3.7038 }, // Madrid, Spain
     content: {
       sections: [
@@ -967,6 +978,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "13 min read",
     tags: ["Study Abroad"],
+    region: "Nordics",
     coordinates: { lat: 55.6761, lng: 12.5683 }, // Copenhagen, Denmark
     content: {
       sections: [
@@ -1088,6 +1100,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "12 min read",
     tags: ["Europe Guides"],
+    region: "Mediterranean",
     coordinates: { lat: 42.6507, lng: 18.0944 }, // Dubrovnik, Croatia
     content: {
       sections: [
@@ -1220,6 +1233,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "11 min read",
     tags: ["Europe Guides"],
+    region: "Mediterranean",
     coordinates: { lat: 44.1625, lng: 9.8228 }, // Cinque Terre, Italy
     content: {
       sections: [
@@ -1346,6 +1360,7 @@ export const journalEntries: JournalEntry[] = [
     },
     readTime: "9 min read",
     tags: ["Europe Guides"],
+    region: "Atlantic Islands",
     coordinates: { lat: 28.4636, lng: -16.2518 }, // Tenerife, Canary Islands
     content: {
       sections: [
